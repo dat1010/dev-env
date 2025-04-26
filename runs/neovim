@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+DIR=$HOME/Documents/neovim
+if [ ! -d "$DIR" ]; then
+  mkdir -p "$DIR"
+fi
+
+
+git clone -b v0.10.1 https://github.com/neovim/neovim.git $HOME/Documents/neovim
+
