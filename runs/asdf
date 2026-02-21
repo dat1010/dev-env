@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+
+ASDF_DIR="$HOME/.asdf"
+
+if [ -d "$ASDF_DIR" ]; then
+    echo "asdf already installed at $ASDF_DIR"
+    exit 0
+fi
+
+git clone https://github.com/asdf-vm/asdf.git "$ASDF_DIR" --branch v0.16.7
+
+echo "asdf installed. Your .zshrc PATH entries will pick it up on next shell start."

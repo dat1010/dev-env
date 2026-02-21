@@ -1,23 +1,52 @@
 #!/usr/bin/env bash
 
-DIR=$HOME/Documents/neovim
-if [ ! -d "$DIR" ]; then
-  mkdir -p "$DIR"
-fi
+# Repo to pull Neovim config from.
+# NVIM_CONFIG_SUBDIR: subdirectory inside the repo containing the nvim config.
+#   Set to "" if the nvim config is at the repo root.
+NVIM_CONFIG_REPO="https://github.com/dat1010/configFiles"
+NVIM_CONFIG_SUBDIR="nvim"
 
+# System dependencies for Neovim and its plugins
+# - make/gcc/g++: LuaSnip regex build step + treesitter parsers
+# - ripgrep: telescope live_grep
+# - fd-find: telescope find_files
+# - unzip: Mason LSP installer
+sudo apt-get update
+sudo apt-get install -y \
+    git \
+    curl \
+    unzip \
+    make \
+    gcc \
+    g++ \
+    ripgrep \
+    fd-find
 
+# Install Neovim from pre-built release
 version="v0.11.1"
-if [ ! -z $NVIM_VERSION ]; then
+if [ ! -z "$NVIM_VERSION" ]; then
     version="$NVIM_VERSION"
 fi
 
-echo "version: \"$version\""
+echo "Installing Neovim $version"
 
-# neovim btw
-git clone https://github.com/neovim/neovim.git $DIR
+curl -LO "https://github.com/neovim/neovim/releases/download/${version}/nvim-linux-x86_64.tar.gz"
+sudo tar -C /opt -xzf nvim-linux-x86_64.tar.gz
+rm nvim-linux-x86_64.tar.gz
+sudo ln -sf /opt/nvim-linux-x86_64/bin/nvim /usr/local/bin/nvim
 
-sudo apt -y install cmake gettext lua5.1 liblua5.1-0-dev
+# Pull nvim config
+TEMP_DIR=$(mktemp -d)
+git clone --depth=1 "$NVIM_CONFIG_REPO" "$TEMP_DIR"
 
-make CMAKE_BUILD_TYPE=Release
-sudo make install
+if [ -z "$NVIM_CONFIG_SUBDIR" ]; then
+    CONFIG_SRC="$TEMP_DIR"
+else
+    CONFIG_SRC="$TEMP_DIR/$NVIM_CONFIG_SUBDIR"
+fi
 
+rm -rf "$HOME/.config/nvim"
+cp -r "$CONFIG_SRC" "$HOME/.config/nvim"
+rm -rf "$TEMP_DIR"
+
+echo "Neovim $version installed with config from $NVIM_CONFIG_REPO"
