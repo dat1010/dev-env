@@ -4,7 +4,7 @@
 # Path to your Oh My Zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
 
-export PATH="$HOME/bin:$PATH"
+export PATH="$HOME/bin:$HOME/.local/bin:$PATH"
 
 eval "$(direnv hook zsh)"
 
@@ -59,7 +59,7 @@ ZSH_THEME="robbyrussell"
 # DISABLE_UNTRACKED_FILES_DIRTY="true"
 
 # Uncomment the following line if you want to change the command execution time
-# stamp shown in the history command output.
+# stamp shown the history command output.
 # You can set one of the optional three formats:
 # "mm/dd/yyyy"|"dd.mm.yyyy"|"yyyy-mm-dd"
 # or set a custom format using the strftime function format specifications,
@@ -102,30 +102,27 @@ source $ZSH/oh-my-zsh.sh
 # - $ZSH_CUSTOM/aliases.zsh
 # - $ZSH_CUSTOM/macos.zsh
 # For a full list of active aliases, run `alias`.
-#
-# Example aliases
-# alias zshconfig="mate ~/.zshrc"
-# alias ohmyzsh="mate ~/.oh-my-zsh"
 alias cls="clear"
 alias nv="nvim"
 alias gs="git status"
 alias ga="git add"
 
-
-#neovim 
+# neovim
 export PATH="$PATH:/opt/nvim-linux-x86_64/bin"
 
+# SSH agent
 if [ -z "$SSH_AUTH_SOCK" ]; then
-	  eval "$(ssh-agent -s)"
+    eval "$(ssh-agent -s)"
 fi
-
-# Add the SSH key to the agent
 ssh-add -l &>/dev/null || ssh-add ~/.ssh/id_ed25519
 
-# Add asdf to your PATH:
-export PATH="$HOME/.asdf/bin:$PATH"
-export PATH="$HOME/.asdf/shims:$PATH"
+# asdf
+. $HOME/.asdf/asdf.sh
 
+# pyenv
+eval "$(pyenv init --path)"
+
+# nvm
 export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
