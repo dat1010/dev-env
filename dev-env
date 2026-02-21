@@ -45,7 +45,11 @@ copy_dir() {
     to=$2
 
     pushd $from > /dev/null
-    dirs=$(gfind . -maxdepth 1 -mindepth 1 -type d)
+    if [[ "$(uname)" == "Darwin" ]]; then
+        dirs=$(gfind . -maxdepth 1 -mindepth 1 -type d)
+    else
+        dirs=$(find . -maxdepth 1 -mindepth 1 -type d)
+    fi
     for dir in $dirs; do
         execute rm -rf $to/$dir
         execute cp -r $dir $to/$dir
