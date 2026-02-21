@@ -102,10 +102,8 @@ source $ZSH/oh-my-zsh.sh
 # - $ZSH_CUSTOM/aliases.zsh
 # - $ZSH_CUSTOM/macos.zsh
 # For a full list of active aliases, run `alias`.
-alias cls="clear"
-alias nv="nvim"
-alias gs="git status"
-alias ga="git add"
+# aliases
+[ -f "$HOME/.bash_aliases" ] && source "$HOME/.bash_aliases"
 
 # neovim
 export PATH="$PATH:/opt/nvim-linux-x86_64/bin"
